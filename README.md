@@ -34,25 +34,25 @@ A free OMDb API key was generated for this project.
 
 #### Prerequisites
 
-  Python 3.x
+    Python 3.x
 
 #### MySQL (local instance)
 
-  Install Required Libraries
+    Install Required Libraries
   
-  pip install pandas requests mysql-connector-python
+    pip install pandas requests mysql-connector-python
 
 #### Database Setup
 
-  CREATE DATABASE movie_pipeline;
+    CREATE DATABASE movie_pipeline;
   
-  USE movie_pipeline;
+    USE movie_pipeline;
 
   Execute all table creation statements from schema.sql.
 
 #### Run the ETL Pipeline
 
-  python etl.py
+    python etl.py
 
 ## 📌 4. ETL Design & Flow
 
@@ -108,27 +108,27 @@ These queries are included in queries.sql.
 
 #### API Rate Limits
 
-  OMDb free API has request limits.
+    OMDb free API has request limits.
 
-  Solution: Limited API calls and added delays between requests.
+    Solution: Limited API calls and added delays between requests.
 
 #### Movie Title Matching Issues
 
-  Movie titles in the dataset did not always match OMDb.
+    Movie titles in the dataset did not always match OMDb.
 
-  Solution: Cleaned titles and handled missing data gracefully.
+    Solution: Cleaned titles and handled missing data gracefully.
 
 #### Duplicate Data on Re-Runs
 
-  Running the ETL multiple times could insert duplicates.
+    Running the ETL multiple times could insert duplicates.
 
-  Solution: Used INSERT IGNORE for idempotent inserts.
+    Solution: Used INSERT IGNORE for idempotent inserts.
 
 #### Timestamp Format Issues
 
-  Ratings timestamps were in UNIX format.
+    Ratings timestamps were in UNIX format.
 
-  Solution: Converted timestamps to MySQL DATETIME in Python.
+    Solution: Converted timestamps to MySQL DATETIME in Python.
 
 ## 📌 8. Assumptions
 
@@ -147,3 +147,4 @@ These queries are included in queries.sql.
   3. Add logging instead of print statements.
 
   4. Enrich all movies using IMDb IDs for accuracy.
+
