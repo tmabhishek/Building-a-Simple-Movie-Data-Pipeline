@@ -1,190 +1,149 @@
-🎬 Movie Data Pipeline – ETL Assignment
-📌 Overview
+# 🎬 Building a Simple Movie Data Pipeline
+## 📌 1. Overview
 
-This project implements an end-to-end ETL (Extract, Transform, Load) pipeline using the MovieLens dataset and the OMDb API.
-The pipeline ingests movie and rating data from CSV files, enriches movie records using an external API, transforms and normalizes the data, and loads it into a MySQL relational database for analytical use.
+This project implements a basic end-to-end ETL pipeline using the MovieLens dataset enriched with additional movie information from the OMDb API.
 
-The objective of this assignment is to demonstrate data engineering fundamentals, including data modeling, external API integration, ETL design, and SQL-based analytics.
+The pipeline reads movie and rating data from CSV files, enriches a subset of movies using an external API, transforms and cleans the data, and loads it into a MySQL database for running analytical SQL queries.
 
-📌 Data Sources
+The main goal of this project is to demonstrate:
+  1. ETL fundamentals
+  2. API integration
+  3. Relational database design
+  4. SQL-based analysis
 
-MovieLens Dataset (Small Version)
-Source: https://grouplens.org/datasets/movielens/latest/
+## 📌 2. Data Sources
 
-Files used:
+#### MovieLens Dataset (Small):
+  
+  1. movies.csv → movieId, title, genres
 
-movies.csv
+  2. ratings.csv → userId, movieId, rating, timestamp
 
-ratings.csv
+#### OMDb API:
+Used to fetch:
 
-OMDb API (Open Movie Database)
-Website: http://www.omdbapi.com/
+  1. Director
 
-Used to enrich movie data with additional attributes such as:
+  2. IMDb ID
 
-Director
-
-IMDb ID
-
-Box Office information
+  3. Box Office information
 
 A free OMDb API key was generated for this project.
 
-🏗️ Architecture & Flow
-Extract
+## 📌 3. Environment Setup & Execution
 
-Read movies.csv and ratings.csv from the MovieLens dataset
+#### Prerequisites
 
-Fetch additional movie details using the OMDb API
+  Python 3.x
 
-Transform
+#### MySQL (local instance)
 
-Clean movie titles to improve API matching
+  Install Required Libraries
+  
+  pip install pandas requests mysql-connector-python
 
-Extract release year from movie titles
+#### Database Setup
 
-Handle missing or unmatched API responses gracefully
+  CREATE DATABASE movie_pipeline;
+  
+  USE movie_pipeline;
 
-Normalize genres into a separate table (one genre per row)
+  Execute all table creation statements from schema.sql.
 
-Load
+#### Run the ETL Pipeline
 
-Load movies, ratings, and genres into MySQL
+  python etl.py
 
-Ensure idempotent execution using INSERT IGNORE
+## 📌 4. ETL Design & Flow
 
-📂 Project Structure
-movie-data-pipeline/
-├── etl.py         # Python ETL pipeline
-├── schema.sql     # Database schema
-├── queries.sql    # Analytical SQL queries
-└── README.md      # Project documentation
+#### Extract
 
-🛠️ Technologies Used
+  1. Read movies.csv and ratings.csv using Pandas.
 
-Python 3.11
+  2. Fetch movie details from OMDb API for a limited number of movies.
 
-Pandas – CSV processing
+#### Transform
 
-Requests – OMDb API integration
+  1. Clean movie titles by removing release years for better API matching.
 
-MySQL 8.0
+  2. Extract release year from movie titles.
 
-MySQL Connector for Python
+  3. Convert rating timestamps from UNIX format to MySQL DATETIME.
 
-⚙️ Environment Setup
-1️⃣ Prerequisites
+  4. Handle missing API responses by inserting NULL values.
 
-Python 3.11 or higher
+#### Load
 
-MySQL Server running locally
+  1. Insert movies, ratings, and genres into MySQL.
 
-MySQL Workbench (optional but recommended)
+  2. Use INSERT IGNORE to avoid duplicate records.
 
-2️⃣ Install Python Dependencies
-pip install pandas requests mysql-connector-python
+  3. Maintain referential integrity using foreign keys.
 
-3️⃣ Database Setup
+## 📌 5. Data Model Explanation
 
-Run the following commands in MySQL:
+  movies: Stores movie details and enriched metadata.
 
-CREATE DATABASE movie_pipeline;
-USE movie_pipeline;
+  ratings: Stores user ratings linked to movies.
 
+  genres: Stores movie-genre mappings.
 
-Then execute all statements in schema.sql to create the required tables:
+This normalized design makes analytical queries easier and avoids data duplication.
 
-movies
+## 📌 6. Analytical Queries
 
-ratings
+The following SQL queries were implemented:
 
-genres
+  1. Movie with the highest average rating
 
-▶️ How to Run the Project
+  2. Top 5 genres by average rating
 
-Place movies.csv and ratings.csv in the same directory as etl.py
+  3. Director with the most movies
 
-Update MySQL credentials inside etl.py if required
+  4. Average movie rating by release year
 
-Run the ETL pipeline:
+These queries are included in queries.sql.
 
-python etl.py
+## 📌 7. Challenges Faced & Solutions
 
-Expected Output
-Movies CSV shape: (9742, 3)
-Ratings CSV shape: (100836, 4)
-Enriched movies shape: (200, 7)
-MySQL connected successfully!
-Movies loaded
-Ratings loaded
-Genres loaded
-ETL completed successfully
+#### API Rate Limits
 
-🧠 Design Choices & Assumptions
-🔹 API Rate Limiting
+  OMDb free API has request limits.
 
-The OMDb free tier has request limits
+  Solution: Limited API calls and added delays between requests.
 
-Enrichment is limited to a subset of 200 movies
+#### Movie Title Matching Issues
 
-The pipeline is configurable and can be scaled using batching or a paid API tier
+  Movie titles in the dataset did not always match OMDb.
 
-🔹 Handling Missing API Data
+  Solution: Cleaned titles and handled missing data gracefully.
 
-Movie titles may not match OMDb exactly
+#### Duplicate Data on Re-Runs
 
-API failures or missing data are handled by inserting NULL values
+  Running the ETL multiple times could insert duplicates.
 
-The pipeline continues execution without failure
+  Solution: Used INSERT IGNORE for idempotent inserts.
 
-🔹 Data Modeling
+#### Timestamp Format Issues
 
-Genres are normalized into a separate table
+  Ratings timestamps were in UNIX format.
 
-Ratings reference movies via foreign keys
+  Solution: Converted timestamps to MySQL DATETIME in Python.
 
-Auto-increment IDs are used as surrogate primary keys
+## 📌 8. Assumptions
 
-🔹 Idempotency
+  1. Only a subset of movies is enriched due to API limits.
 
-INSERT IGNORE ensures the ETL pipeline can be re-run safely without creating duplicate records
+  2. Missing API values are stored as NULL.
 
-📊 Analytical Queries
+  3. Local MySQL database is used for simplicity.
+     
+## 📌 9. Possible Improvements
 
-All required analytical SQL queries are included in queries.sql, such as:
+  1. Cache API responses to avoid repeated calls.
 
-Highest average rated movie
+  2. Use batch inserts for better performance.
 
-Top 5 genres by average rating
+  3. Add logging instead of print statements.
 
-Director with the most movies
-
-Average movie rating by release year
-
-🚧 Challenges & Solutions
-Challenge 1: Movie Title Mismatch
-
-Problem: MovieLens titles often include years or formatting differences
-Solution: Titles were cleaned before API calls, and unmatched movies were handled safely
-
-Challenge 2: API Rate Limits
-
-Problem: OMDb free tier enforces request limits
-Solution: Limited API calls and introduced delays to avoid throttling
-
-Challenge 3: Large Ratings Dataset
-
-Problem: The dataset contains over 100,000 ratings
-Solution: Efficient inserts and idempotent loading logic were used
-
-🚀 Future Improvements
-
-Use IMDb IDs (links.csv) for more accurate API matching
-
-Use batch inserts (executemany) for improved performance
-
-Cache API responses to reduce repeated calls
-
-Add structured logging instead of print statements
-
-Containerize the pipeline using Docker
+  4. Enrich all movies using IMDb IDs for accuracy.
