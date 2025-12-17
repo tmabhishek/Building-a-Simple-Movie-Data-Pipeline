@@ -1,5 +1,5 @@
 # 🎬 Building a Simple Movie Data Pipeline
-## 📌 1. Overview
+## 1. Overview
 
 This project implements a basic end-to-end ETL pipeline using the MovieLens dataset enriched with additional movie information from the OMDb API.
 
@@ -11,7 +11,7 @@ The main goal of this project is to demonstrate:
   3. Relational database design
   4. SQL-based analysis
 
-## 📌 2. Data Sources
+## 2. Data Sources
 
 #### MovieLens Dataset (Small):
   
@@ -30,7 +30,7 @@ Used to fetch:
 
 A free OMDb API key was generated for this project.
 
-## 📌 3. Environment Setup & Execution
+## 3. Environment Setup & Execution
 
 #### Prerequisites
 
@@ -54,7 +54,7 @@ A free OMDb API key was generated for this project.
 
     python etl.py
 
-## 📌 4. ETL Design & Flow
+## 4. ETL Design & Flow
 
 #### Extract
 
@@ -80,7 +80,7 @@ A free OMDb API key was generated for this project.
 
   3. Maintain referential integrity using foreign keys.
 
-## 📌 5. Data Model Explanation
+## 5. Data Model Explanation
 
   movies: Stores movie details and enriched metadata.
 
@@ -90,7 +90,7 @@ A free OMDb API key was generated for this project.
 
 This normalized design makes analytical queries easier and avoids data duplication.
 
-## 📌 6. Analytical Queries
+## 6. Analytical Queries
 
 The following SQL queries were implemented:
 
@@ -104,7 +104,7 @@ The following SQL queries were implemented:
 
 These queries are included in queries.sql.
 
-## 📌 7. Challenges Faced & Solutions
+## 7. Challenges Faced & Solutions
 
 #### API Rate Limits
 
@@ -130,7 +130,7 @@ These queries are included in queries.sql.
 
     Solution: Converted timestamps to MySQL DATETIME in Python.
 
-## 📌 8. Assumptions
+## 8. Assumptions
 
   1. Only a subset of movies is enriched due to API limits.
 
@@ -138,7 +138,7 @@ These queries are included in queries.sql.
 
   3. Local MySQL database is used for simplicity.
      
-## 📌 9. Possible Improvements
+## 9. Possible Improvements
 
   1. Cache API responses to avoid repeated calls.
 
@@ -147,4 +147,5 @@ These queries are included in queries.sql.
   3. Add logging instead of print statements.
 
   4. Enrich all movies using IMDb IDs for accuracy.
+
 
